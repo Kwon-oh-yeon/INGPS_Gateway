@@ -253,7 +253,8 @@
 #define CFG_LPM_WAKEUP_TIME_PROFILING (1U)
 
 /* USER CODE BEGIN Low_Power 0 */
-
+#undef CFG_LPM_LEVEL
+#define CFG_LPM_LEVEL (0U)
 /* USER CODE END Low_Power 0 */
 
 /**

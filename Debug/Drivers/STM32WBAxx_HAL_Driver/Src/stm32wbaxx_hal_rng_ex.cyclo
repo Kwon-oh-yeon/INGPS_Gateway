@@ -1,0 +1,4 @@
+../Drivers/STM32WBAxx_HAL_Driver/Src/stm32wbaxx_hal_rng_ex.c:88:19:HAL_RNGEx_SetConfig	8
+../Drivers/STM32WBAxx_HAL_Driver/Src/stm32wbaxx_hal_rng_ex.c:196:19:HAL_RNGEx_GetConfig	4
+../Drivers/STM32WBAxx_HAL_Driver/Src/stm32wbaxx_hal_rng_ex.c:251:19:HAL_RNGEx_LockConfig	3
+../Drivers/STM32WBAxx_HAL_Driver/Src/stm32wbaxx_hal_rng_ex.c:311:19:HAL_RNGEx_RecoverSeedError	5

@@ -521,8 +521,8 @@ SVCCTL_UserEvtFlowStatus_t SVCCTL_App_Notification(void *p_Pckt)
           p_adv_report = (hci_le_advertising_report_event_rp0 *) p_meta_evt->data;
           UNUSED(p_adv_report);
 
-          //rssi = HCI_LE_ADVERTISING_REPORT_RSSI(p_meta_evt->data);
-          //UNUSED(rssi);
+          rssi = HCI_LE_ADVERTISING_REPORT_RSSI(p_meta_evt->data);
+          UNUSED(rssi);
 
           /* USER CODE BEGIN HCI_EVT_LE_ADVERTISING_REPORT */
           {
