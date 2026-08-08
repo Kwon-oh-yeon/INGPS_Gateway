@@ -1,3 +1,0 @@
-../Drivers/Ethernet_W550/MQTT/MQTTPacket/src/MQTTConnectServer.c:30:5:MQTTPacket_checkVersion	5
-../Drivers/Ethernet_W550/MQTT/MQTTPacket/src/MQTTConnectServer.c:51:5:MQTTDeserialize_connect	16
-../Drivers/Ethernet_W550/MQTT/MQTTPacket/src/MQTTConnectServer.c:121:5:MQTTSerialize_connack	2

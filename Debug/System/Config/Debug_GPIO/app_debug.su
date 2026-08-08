@@ -1,4 +1,0 @@
-../System/Config/Debug_GPIO/app_debug.c:799:6:APP_DEBUG_SIGNAL_SET	16	static
-../System/Config/Debug_GPIO/app_debug.c:805:6:APP_DEBUG_SIGNAL_RESET	16	static
-../System/Config/Debug_GPIO/app_debug.c:812:6:APP_DEBUG_SIGNAL_TOGGLE	16	static
-../System/Config/Debug_GPIO/app_debug.c:827:6:RT_DEBUG_GPIO_Init	4	static
