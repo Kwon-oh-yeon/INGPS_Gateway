@@ -1,6 +1,0 @@
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:34:13:ll_sys_event_missed_cb	24	static
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:50:6:ll_sys_ble_cntrl_init	16	static
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:80:6:ll_sys_thread_init	8	static
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:92:13:ll_sys_dependencies_init	16	static
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:113:13:ll_init	16	static
-../Middlewares/ST/STM32_WPAN/link_layer/ll_sys/src/ll_sys_startup.c:136:13:ll_sys_handle_missed_event_cb	16	static

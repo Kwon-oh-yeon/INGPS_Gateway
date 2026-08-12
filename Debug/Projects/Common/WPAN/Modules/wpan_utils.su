@@ -1,9 +1,0 @@
-../Drivers/STM32WBAxx_HAL_Driver/Inc/stm32wbaxx_ll_utils.h:273:26:LL_GetPackageType	4	static
-../Drivers/STM32WBAxx_HAL_Driver/Inc/stm32wbaxx_ll_system.h:945:26:LL_DBGMCU_GetDeviceID	4	static
-../Drivers/STM32WBAxx_HAL_Driver/Inc/stm32wbaxx_ll_system.h:956:26:LL_DBGMCU_GetRevisionID	4	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:79:10:WpanUtils_GetDeviceId	8	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:84:8:WpanUtils_GetDeviceName	16	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:104:10:WpanUtils_GetDeviceRevId	8	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:109:8:WpanUtils_GetDeviceRevName	16	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:129:10:WpanUtils_GetDevicePackageId	8	static
-../Projects/Common/WPAN/Modules/wpan_utils.c:134:8:WpanUtils_GetDevicePackageName	16	static

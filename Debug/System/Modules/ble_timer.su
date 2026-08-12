@@ -1,7 +1,0 @@
-../System/Modules/ble_timer.c:54:6:BLE_TIMER_Init	8	static
-../System/Modules/ble_timer.c:64:6:BLE_TIMER_Deinit	16	static
-../System/Modules/ble_timer.c:87:8:BLE_TIMER_Start	32	static
-../System/Modules/ble_timer.c:121:6:BLE_TIMER_Stop	24	static
-../System/Modules/ble_timer.c:143:6:BLE_TIMER_Background	16	static
-../System/Modules/ble_timer.c:164:13:BLE_TIMER_Callback	16	static
-../System/Modules/ble_timer.c:174:21:BLE_TIMER_GetFromList	24	static
