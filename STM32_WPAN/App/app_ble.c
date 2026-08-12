@@ -549,8 +549,7 @@ SVCCTL_UserEvtFlowStatus_t SVCCTL_App_Notification(void *p_Pckt)
 
                   // 2. 우리 기기라면 데이터 파싱 진행
                   if (found_idx != -1) {
-                	  printf("event_type=0x%02X num_reports=%d data_len=%d rssi_byte=0x%02X\r\n",
-                	         p_data[0], num_reports, data_len, p_data[9 + data_len]);
+                	  //printf("[BLE_RX] dev=%d tick=%lu\r\n", found_idx, HAL_GetTick());
                 	  uint8_t j = 0;
 
                       while (j < data_len) {

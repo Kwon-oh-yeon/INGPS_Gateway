@@ -25,9 +25,16 @@
 #ifdef USE_BROKER_HOSTNAME
 #define MQTT_BROKER_HOST "test.mosquitto.org"
 #else
-//#define MQTT_BROKER_IP   { 13,209,92,219 }	//바로 서버로 쏠 때 사용
-#define MQTT_BROKER_IP   { 192,168,137,1 }		//로컬 브로커 IP 사용
-//#define MQTT_BROKER_IP   { 192,168,219,107 }
+/* 테스트 환경에 맞게 이 스위치만 바꾸면 됨.
+   1 = 공유기 없이 노트북 ICS 직결 테스트용 (로컬 Mosquitto → EC2 브리지)
+   0 = 공유기 + DHCP로 인터넷 나가는 실제(또는 발표) 환경, EC2로 직결 */
+#define USE_LOCAL_MQTT_BROKER   1
+
+#if USE_LOCAL_MQTT_BROKER
+#define MQTT_BROKER_IP   { 192,168,137,1 }   // 노트북 ICS 로컬 Mosquitto
+#else
+#define MQTT_BROKER_IP   { 13,209,92,219 }   // AWS EC2 직결
+#endif
 #endif
 
 #define MQTT_BROKER_PORT 1883

@@ -45,6 +45,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+IWDG_HandleTypeDef hiwdg;
+
 UART_HandleTypeDef hlpuart1;
 UART_HandleTypeDef huart1;
 
@@ -72,7 +74,7 @@ static uint8_t mqtt_ready = 0;
 static apa102_led_t led_state[LED_COUNT];
 
 /* --- LED 타임아웃 관리 --- */
-#define LED_TIMEOUT_MS   3000U
+#define LED_TIMEOUT_MS   5000U
 static uint32_t led_last_seen[LED_COUNT] = {0};
 static uint8_t  led_active[LED_COUNT]    = {0};
 
@@ -106,6 +108,7 @@ static void MX_GPIO_Init(void);
 static void MX_LPUART1_UART_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_IWDG_Init(void);
 /* USER CODE BEGIN PFP */
 extern int W5500_Init(void);
 extern int mqtt_network_init(void);
@@ -183,6 +186,7 @@ int main(void)
   MX_RTC_Init();
   MX_SPI3_Init();
   MX_USART1_UART_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
   if (W5500_Init() == 0 && mqtt_network_init() == 0 && mqtt_connect_broker() == 0)
   {
@@ -209,6 +213,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	HAL_IWDG_Refresh(&hiwdg);
     MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
@@ -216,7 +221,7 @@ int main(void)
     gateway_try_reconnect();    /* 끊겼으면 5초 주기로 재연결 시도 */
 
     handle_ble_messages();      /* BLE 큐 비우기 + LED + publish */
-    check_led_timeouts();       /* 3초 이상 조용한 LED 소등 */
+    check_led_timeouts();       /* 5초 이상 조용한 LED 소등 */
 
     if (gw_state == GW_STATE_CONNECTED)
     {
@@ -249,13 +254,15 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB busses clocks
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE
-                              |RCC_OSCILLATORTYPE_LSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI
+                              |RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEDiv = RCC_HSE_DIV1;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.LSIState = RCC_LSI1_ON;
+  RCC_OscInitStruct.LSIDiv = RCC_LSI_DIV1;
   RCC_OscInitStruct.PLL1.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL1.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL1.PLLM = 1;
@@ -343,6 +350,36 @@ void MX_ICACHE_Init(void)
   /* USER CODE BEGIN ICACHE_Init 2 */
 
   /* USER CODE END ICACHE_Init 2 */
+
+}
+
+/**
+  * @brief IWDG Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_IWDG_Init(void)
+{
+
+  /* USER CODE BEGIN IWDG_Init 0 */
+
+  /* USER CODE END IWDG_Init 0 */
+
+  /* USER CODE BEGIN IWDG_Init 1 */
+
+  /* USER CODE END IWDG_Init 1 */
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
+  hiwdg.Init.Window = 4095;
+  hiwdg.Init.Reload = 1874;
+  hiwdg.Init.EWI = 0;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN IWDG_Init 2 */
+
+  /* USER CODE END IWDG_Init 2 */
 
 }
 
@@ -854,8 +891,6 @@ static void publish_sensor_data(ble_msg_t *msg)
     if (n > 0 && (size_t)n < sizeof(mqtt_buf))
     {
         mqtt_publish("ingps/sensor", mqtt_buf);
-        printf("[PUB] dev=%d t1=%d.%02d t2=%d.%02d rssi=%d\r\n",
-               msg->device_id, t1_int, t1_frac, t2_int, t2_frac, msg->rssi);
     }
     else
         printf("[WARN] mqtt_buf truncated, skip publish dev=%d\r\n", msg->device_id);

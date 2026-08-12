@@ -27,13 +27,26 @@ wiz_NetInfo netInfo = {
     .dhcp = NETINFO_STATIC
 };*/
 
+//wiz_NetInfo netInfo = {
+//    .mac = {0x00, 0x08, 0xDC, 0x12, 0x34, 0x56},
+//    .ip  = {192, 168, 137, 10},
+//    .sn  = {255, 255, 255, 0},
+//    .gw  = {192, 168, 137, 1},
+//    .dns = {8, 8, 8, 8},
+//    .dhcp = NETINFO_DHCP
+//};
+
 wiz_NetInfo netInfo = {
     .mac = {0x00, 0x08, 0xDC, 0x12, 0x34, 0x56},
     .ip  = {192, 168, 137, 10},
     .sn  = {255, 255, 255, 0},
     .gw  = {192, 168, 137, 1},
     .dns = {8, 8, 8, 8},
-    .dhcp = NETINFO_STATIC
+#if USE_DHCP
+    .dhcp = NETINFO_DHCP
+#else
+	.dhcp = NETINFO_STATIC
+#endif
 };
 
 /*
@@ -136,12 +149,57 @@ int W5500_Init(void)
         return 3;
     }
 
+    /***** Use DHCP or Static IP  *****/
+#if USE_DHCP
+    printf("Using DHCP.. Please Wait..\r\n");
+    setSHAR(netInfo.mac);
+    DHCP_init(DHCP_SOCKET, DHCP_buffer);
+    reg_dhcp_cbfunc(Callback_IPAssigned, Callback_IPAssigned, Callback_IPConflict);
+
+    uint8_t dhcp_retries = 100;
+    uint32_t last_tick_1s = HAL_GetTick();
+
+    while ((!ip_assigned) && (dhcp_retries > 0)) {
+        DHCP_run();
+
+        /* DHCP 라이브러리가 요구하는 1초 틱 — 반드시 호출해줘야
+           내부 재전송/타임아웃 타이머가 정상적으로 흐름 */
+        if (HAL_GetTick() - last_tick_1s >= 1000)
+        {
+            DHCP_time_handler();
+            last_tick_1s = HAL_GetTick();
+        }
+
+        HAL_Delay(100);
+        dhcp_retries--;
+    }
+
+    if (!ip_assigned) {
+        printf("DHCP Failed, switching to static IP\r\n");
+        ctlnetwork(CN_SET_NETINFO, (void*)&netInfo);
+    }
+    else {
+        getIPfromDHCP(netInfo.ip);
+        getGWfromDHCP(netInfo.gw);
+        getSNfromDHCP(netInfo.sn);
+        getDNSfromDHCP(netInfo.dns);
+        ctlnetwork(CN_SET_NETINFO, (void*)&netInfo);
+        printf("DHCP IP assigned successfully\r\n");
+    }
+#else
     /***** Use Static IP  *****/
     ctlnetwork(CN_SET_NETINFO, (void*)&netInfo);
+#endif
 
     /***** Configure DNS  *****/
     HAL_Delay(500);
     DNS_init(DNS_SOCKET, DNS_buffer);
+
+    /***** Print assigned IP on the console (DHCP 확인용) *****/
+    wiz_NetInfo tmpInfo;
+    ctlnetwork(CN_GET_NETINFO, &tmpInfo);
+    printf("IP: %d.%d.%d.%d\r\n", tmpInfo.ip[0], tmpInfo.ip[1], tmpInfo.ip[2], tmpInfo.ip[3]);
+    printf("GATEWAY: %d.%d.%d.%d\r\n", tmpInfo.gw[0], tmpInfo.gw[1], tmpInfo.gw[2], tmpInfo.gw[3]);
 
     return 0;
 }
